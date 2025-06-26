@@ -4,11 +4,11 @@ import plotly.graph_objects as go
 from datetime import date
 import yagmail
 
-# Setup
+#Setup
 st.set_page_config(page_title="📈 Stock Market App", layout="wide")
 st.markdown("<h1 style='text-align: center;'>📈 Stock Market Dashboard</h1>", unsafe_allow_html=True)
 
-# 🌗 Theme Toggle
+#Theme Toggle
 theme = st.sidebar.radio("🌗 Choose Theme", ["Light", "Dark"])
 if theme == "Dark":
     st.markdown("""
@@ -17,7 +17,7 @@ if theme == "Dark":
         </style>
     """, unsafe_allow_html=True)
 
-# 🔎 Sidebar Inputs
+#Sidebar Inputs
 st.sidebar.header("Search Settings")
 ticker = st.sidebar.text_input("Enter Stock Ticker", "AAPL")
 start_date = st.sidebar.date_input("Start Date", date(2023, 1, 1))
@@ -29,20 +29,20 @@ show_macd = st.sidebar.checkbox("Show MACD")
 show_bollinger = st.sidebar.checkbox("Show Bollinger Bands")
 show_volume = st.sidebar.checkbox("Show Volume")
 
-# 📌 Session-based Search History
+#Session-based Search History
 if "history" not in st.session_state:
     st.session_state.history = []
 
 if ticker and ticker not in st.session_state.history:
     st.session_state.history.append(ticker)
 
-# 📜 Show Search History
+# Show Search History
 if st.session_state.history:
     st.sidebar.markdown("### 🔍 Search History")
     for item in st.session_state.history[-5:][::-1]:
         st.sidebar.write(f"- {item}")
 
-# 📈 Fetch Stock Data
+# Fetch Stock Data
 if ticker:
     stock = yf.Ticker(ticker)
     data = stock.history(start=start_date, end=end_date)
@@ -85,7 +85,7 @@ if ticker:
             data['Upper Band'] = sma + 2 * std
             data['Lower Band'] = sma - 2 * std
 
-        # 📊 Chart
+        #Chart
         st.subheader("📊 Stock Chart")
         fig = go.Figure()
 
@@ -130,7 +130,7 @@ if ticker:
 
         st.plotly_chart(fig, use_container_width=True)
 
-        # ✉️ Email Alert Section
+        #Email Alert Section
         st.subheader("🔔 Set Email Alert for Price Drop")
         with st.form("email_alert_form"):
             user_email = st.text_input("Enter your email:")
